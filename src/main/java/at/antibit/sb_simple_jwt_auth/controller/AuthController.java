@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,20 +38,27 @@ public class AuthController {
         return service.login(req.username, req.password);
     }
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello authenticated user";
+    @GetMapping("/users")
+    public List<UserDto> listAllUsers() {
+        return this.service.getUsers();
     }
 
     @Secured("ADMIN_ROLE")
-    @GetMapping("/admin")
-    public String adminOnly() {
-        return "Hello Admin";
+    @DeleteMapping("/users/{id}")
+    public void deleteUserById(@PathVariable Long id) {
+        this.service.deleteUserById(id);
     }
 
     @Data
-    public static class AuthRequest {
+    static class AuthRequest {
         public String username;
         public String password;
+    }
+
+    @Data
+    public static class UserDto {
+        public final Long id;
+        public final String username;
+        public final String role;
     }
 }
