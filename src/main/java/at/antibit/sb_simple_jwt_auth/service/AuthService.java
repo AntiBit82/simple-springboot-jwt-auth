@@ -3,6 +3,7 @@ package at.antibit.sb_simple_jwt_auth.service;
 import at.antibit.sb_simple_jwt_auth.model.User;
 import at.antibit.sb_simple_jwt_auth.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final UserRepository repo;
@@ -28,7 +30,8 @@ public class AuthService {
                 .role("USER_ROLE")
                 .build();
         repo.save(user);
-        return "User registered";
+        log.info("User '"+username+"' registered successfully");
+        return "User '" + username + "' registered";
     }
 
     public String registerAdmin(String username, String password) {
@@ -43,12 +46,13 @@ public class AuthService {
                 .role("ADMIN_ROLE")
                 .build();
         repo.save(user);
-        return "Admin registered";
+        log.info("Admin '"+username+"' registered successfully");
+        return "Admin '" + username + "' registered";
     }
 
     public String login(String username, String password) {
         User user = repo.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User '" + username + "' not found"));
 
         if (!encoder.matches(password, user.getPassword()))
             throw new RuntimeException("Invalid credentials");

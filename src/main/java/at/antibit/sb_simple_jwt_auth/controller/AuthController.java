@@ -3,8 +3,11 @@ package at.antibit.sb_simple_jwt_auth.controller;
 import at.antibit.sb_simple_jwt_auth.service.AuthService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -14,13 +17,19 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/register")
-    public String register(@RequestBody AuthRequest req) {
-        return service.register(req.username, req.password);
+    public ResponseEntity register(@RequestBody AuthRequest req) {
+        String message = service.register(req.username, req.password);
+        return ResponseEntity.ok(Map.of(
+                "message", message
+        ));
     }
 
     @PostMapping("/register-admin")
-    public String registerAdmin(@RequestBody AuthRequest req) {
-        return service.registerAdmin(req.username, req.password);
+    public ResponseEntity registerAdmin(@RequestBody AuthRequest req) {
+        String  message = service.registerAdmin(req.username, req.password);
+        return  ResponseEntity.ok(Map.of(
+                "message", message
+        ));
     }
 
     @PostMapping("/login")
