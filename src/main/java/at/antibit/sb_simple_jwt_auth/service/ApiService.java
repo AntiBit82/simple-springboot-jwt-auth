@@ -1,16 +1,24 @@
 package at.antibit.sb_simple_jwt_auth.service;
 
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Arrays;
 
 @Service
 public class ApiService {
-    public String getTestMessage() {
-        return "Hello User!";
+
+    public String getTestMessage() { return "Principal: '" + SecurityContextHolder.getContext()
+            .getAuthentication().getPrincipal()
+            + "', Roles: " + getRolesString();
     }
 
-    public String getAdminTestMessage() {
-        return "Hello Admin!";
+    private String getRolesString() {
+        String[] auths = SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                .toArray(String[]::new);
+        return Arrays.toString(auths);
     }
 }

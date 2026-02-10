@@ -1,4 +1,4 @@
-package at.antibit.sb_simple_jwt_auth.model;
+package at.antibit.sb_simple_jwt_auth.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

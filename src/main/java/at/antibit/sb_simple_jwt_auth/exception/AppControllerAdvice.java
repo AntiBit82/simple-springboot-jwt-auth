@@ -40,6 +40,11 @@ public class AppControllerAdvice {
         return build(HttpStatus.FORBIDDEN, "You do not have permission to access this resource");
     }
 
+    @ExceptionHandler(JwtAuthenticationException.class)
+    public ResponseEntity<Object> handleJwt(JwtAuthenticationException ex) {
+        return build(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntime(RuntimeException ex) {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage());

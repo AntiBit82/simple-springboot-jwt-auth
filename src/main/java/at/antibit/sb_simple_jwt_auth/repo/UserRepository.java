@@ -1,6 +1,6 @@
 package at.antibit.sb_simple_jwt_auth.repo;
 
-import at.antibit.sb_simple_jwt_auth.model.User;
+import at.antibit.sb_simple_jwt_auth.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -14,14 +14,14 @@ public class ApiController {
 
     private final ApiService apiService;
 
-    @GetMapping("/hello")
-    public String hello() {
+    @GetMapping("/test/user")
+    public String testUser() {
         return apiService.getTestMessage();
     }
 
     @Secured("ADMIN_ROLE")
-    @GetMapping("/admin")
-    public String adminOnly() {
-        return apiService.getAdminTestMessage();
+    @GetMapping("/test/admin")
+    public String testAdmin() {
+        return apiService.getTestMessage();
     }
 }

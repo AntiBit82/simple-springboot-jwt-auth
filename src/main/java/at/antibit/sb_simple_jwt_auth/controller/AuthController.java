@@ -1,5 +1,6 @@
 package at.antibit.sb_simple_jwt_auth.controller;
 
+import at.antibit.sb_simple_jwt_auth.model.dto.UserDto;
 import at.antibit.sb_simple_jwt_auth.service.AuthService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -53,12 +54,5 @@ public class AuthController {
     static class AuthRequest {
         public String username;
         public String password;
-    }
-
-    @Data
-    public static class UserDto {
-        public final Long id;
-        public final String username;
-        public final String role;
     }
 }

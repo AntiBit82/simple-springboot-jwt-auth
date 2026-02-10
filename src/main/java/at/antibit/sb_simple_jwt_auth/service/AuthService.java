@@ -1,10 +1,11 @@
 package at.antibit.sb_simple_jwt_auth.service;
 
-import at.antibit.sb_simple_jwt_auth.controller.AuthController;
-import at.antibit.sb_simple_jwt_auth.model.User;
+import at.antibit.sb_simple_jwt_auth.model.dto.UserDto;
+import at.antibit.sb_simple_jwt_auth.model.entity.User;
 import at.antibit.sb_simple_jwt_auth.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -57,15 +58,15 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("User '" + username + "' not found"));
 
         if (!encoder.matches(password, user.getPassword()))
-            throw new RuntimeException("Invalid credentials");
+            throw new BadCredentialsException("Invalid credentials");
 
         log.info("User '"+username+"' logged in successfully");
         return jwt.generateToken(username, user.getRole());
     }
 
-    public List<AuthController.UserDto> getUsers() {
+    public List<UserDto> getUsers() {
         return this.userRepository.findAll().stream()
-            .map(u -> new AuthController.UserDto(u.getId(), u.getUsername(), u.getRole()))
+            .map(UserDto::new)
             .toList();
     }
 

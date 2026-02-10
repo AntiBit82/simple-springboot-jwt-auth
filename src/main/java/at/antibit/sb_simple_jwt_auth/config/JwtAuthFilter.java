@@ -1,5 +1,6 @@
 package at.antibit.sb_simple_jwt_auth.config;
 
+import at.antibit.sb_simple_jwt_auth.exception.JwtAuthenticationException;
 import at.antibit.sb_simple_jwt_auth.service.JwtService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -35,8 +36,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 String username = jwt.extractUsername(token);
                 String role = jwt.extractRole(token);
 
-                if (username != null && role != null &&
-                        SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (username != null && role != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(
@@ -45,28 +45,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     List.of(new SimpleGrantedAuthority(role))
                             );
 
-                    authToken.setDetails(
-                            new WebAuthenticationDetailsSource().buildDetails(req)
-                    );
-
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
-
             } catch (io.jsonwebtoken.JwtException e) {
-                // Only JWT parsing errors
-                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                res.setContentType("application/json");
-                res.getWriter().write("""
-                    {
-                      "status": 401,
-                      "error": "Unauthorized",
-                      "message": "Invalid or expired token"
-                    }
-                """);
-                return;
+                throw new JwtAuthenticationException(e.getMessage());
             }
         }
-
         chain.doFilter(req, res);
     }
 }
