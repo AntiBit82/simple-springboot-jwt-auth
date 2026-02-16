@@ -5,7 +5,7 @@ import at.antibit.sb_simple_jwt_auth.service.AuthService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class AuthController {
         return this.service.getUsers();
     }
 
-    @Secured("ADMIN_ROLE")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/users/{id}")
     public void deleteUserById(@PathVariable Long id) {
         this.service.deleteUserById(id);

@@ -30,7 +30,7 @@ public class AuthService {
         User user = User.builder()
                 .username(username)
                 .password(encoder.encode(password))
-                .role("USER_ROLE")
+                .role("ROLE_USER")
                 .build();
         userRepository.save(user);
         log.info("User '"+username+"' registered successfully");
@@ -46,7 +46,7 @@ public class AuthService {
         User user = User.builder()
                 .username(username)
                 .password(encoder.encode(password))
-                .role("ADMIN_ROLE")
+                .role("ROLE_ADMIN")
                 .build();
         userRepository.save(user);
         log.info("Admin '"+username+"' registered successfully");
